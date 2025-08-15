@@ -3,8 +3,8 @@ class Cockup < Formula
 
   desc "Yet another backup tool for various configurations"
   homepage "https://github.com/huaium/cockup"
-  url "https://files.pythonhosted.org/packages/3b/78/b8cc77be08c6800c757cd6d541540bbfa603fe703c09e978584dee71ea8e/cockup-0.1.2.tar.gz"
-  sha256 "377d7693748bb1cba86db1253126d89ecca862ef73b508b39b44c8eb4ecc4382"
+  url "https://files.pythonhosted.org/packages/4b/79/b323662c96434864a83231f458407cb3b199c479d3dfff222d387bd8ad98/cockup-0.1.3.tar.gz"
+  sha256 "70a1899647a9bfe5568030f713aa9a24b3768c155cbfb102d7c6eda7e9e45ca7"
   license "MIT"
   head "https://github.com/huaium/cockup.git", branch: "main"
 
