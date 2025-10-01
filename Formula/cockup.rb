@@ -3,8 +3,8 @@ class Cockup < Formula
 
   desc "Yet another backup tool for various configurations"
   homepage "https://github.com/huaium/cockup"
-  url "https://files.pythonhosted.org/packages/4b/79/b323662c96434864a83231f458407cb3b199c479d3dfff222d387bd8ad98/cockup-0.1.3.tar.gz"
-  sha256 "70a1899647a9bfe5568030f713aa9a24b3768c155cbfb102d7c6eda7e9e45ca7"
+  url "https://files.pythonhosted.org/packages/cf/d2/bb88934803348f002b25d8c6a99063fb9b7cae97dae48dda63bf30e51c27/cockup-0.1.4.tar.gz"
+  sha256 "a2ddfb10a34eddae0ef48b969ffd68c6323b0520bf6b47c8f7d39ebd6d492e3d"
   license "MIT"
   head "https://github.com/huaium/cockup.git", branch: "main"
 
@@ -68,6 +68,20 @@ class Cockup < Formula
 
   def install
     virtualenv_install_with_resources
+
+    bash_comp = bash_completion/"cockup"
+    zsh_comp = zsh_completion/"_cockup"
+    fish_comp = fish_completion/"cockup.fish"
+
+    bash_comp.unlink if bash_comp.exist?
+    zsh_comp.unlink if zsh_comp.exist?
+    fish_comp.unlink if fish_comp.exist?
+
+    generate_completions_from_executable(
+      bin/"cockup",
+      shells:                 [:bash, :zsh, :fish],
+      shell_parameter_format: :click,
+    )
   end
 
   test do
