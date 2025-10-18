@@ -1,0 +1,7 @@
+[project]
+name = "homebrew-tap"
+version = "0.1.0"
+description = "huaium's Homebrew Tap"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["homebrew-pypi-poet>=0.10", "cockup>=0.1"]
