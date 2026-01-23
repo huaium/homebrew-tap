@@ -9,10 +9,6 @@ on:
                 description: "Formula name (e.g. foo for Formula/foo.rb)"
                 required: true
                 default: "cockup"
-            extra_args:
-                description: "Extra args for brew update-python-resources (optional)"
-                required: false
-                default: ""
 
 concurrency:
     group: brew-update-python-resources
@@ -50,20 +46,19 @@ jobs:
             - name: Run brew update-python-resources (in-place)
               env:
                   FORMULA_INPUT: ${{ inputs.formula }}
-                  EXTRA_ARGS: ${{ inputs.extra_args }}
               run: |
                   set -euo pipefail
 
                   FORMULA="${FORMULA_INPUT:-}"
                   if [[ -z "${FORMULA}" ]]; then
-                    FORMULA="${DEFAULT_FORMULA}"
+                  FORMULA="${DEFAULT_FORMULA}"
                   fi
 
                   TAP_FORMULA="${GITHUB_REPOSITORY}/${FORMULA}"
 
-                  echo "Running: brew update-python-resources --install-dependencies ${EXTRA_ARGS} ${TAP_FORMULA}"
+                  echo "Running: brew update-python-resources --install-dependencies ${TAP_FORMULA}"
                   echo "If this step fails, the workflow will fail and you should update resources manually."
-                  brew update-python-resources --install-dependencies ${EXTRA_ARGS} "${TAP_FORMULA}"
+                  brew update-python-resources --install-dependencies "${TAP_FORMULA}"
 
             - name: Show git diff
               run: |
