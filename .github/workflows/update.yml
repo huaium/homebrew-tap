@@ -1,0 +1,95 @@
+name: brew update-python-resources regularly
+
+on:
+    schedule:
+        - cron: "30 2 * * 1"
+    workflow_dispatch:
+        inputs:
+            formula:
+                description: "Formula name (e.g. foo for Formula/foo.rb)"
+                required: true
+                default: "cockup"
+            extra_args:
+                description: "Extra args for brew update-python-resources (optional)"
+                required: false
+                default: ""
+
+concurrency:
+    group: brew-update-python-resources
+    cancel-in-progress: true
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    update:
+        runs-on: macos-latest
+        env:
+            HOMEBREW_NO_AUTO_UPDATE: "1"
+            HOMEBREW_NO_INSTALL_CLEANUP: "1"
+            DEFAULT_FORMULA: "cockup"
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Show versions
+              run: |
+                  set -euo pipefail
+                  brew --version
+                  ruby -v
+                  python3 -V || true
+
+            - name: Tap this repo locally for brew
+              run: |
+                  set -euo pipefail
+                  brew tap "${GITHUB_REPOSITORY}" "${GITHUB_WORKSPACE}" || true
+                  brew tap | grep -F "${GITHUB_REPOSITORY}" || true
+
+            - name: Run brew update-python-resources (in-place)
+              env:
+                  FORMULA_INPUT: ${{ inputs.formula }}
+                  EXTRA_ARGS: ${{ inputs.extra_args }}
+              run: |
+                  set -euo pipefail
+
+                  FORMULA="${FORMULA_INPUT:-}"
+                  if [[ -z "${FORMULA}" ]]; then
+                    FORMULA="${DEFAULT_FORMULA}"
+                  fi
+
+                  TAP_FORMULA="${GITHUB_REPOSITORY}/${FORMULA}"
+
+                  echo "Running: brew update-python-resources --install-dependencies ${EXTRA_ARGS} ${TAP_FORMULA}"
+                  echo "If this step fails, the workflow will fail and you should update resources manually."
+                  brew update-python-resources --install-dependencies ${EXTRA_ARGS} "${TAP_FORMULA}"
+
+            - name: Show git diff
+              run: |
+                  set -euo pipefail
+                  git status
+                  git diff --stat
+
+            - name: Create or update pull request (only if changed)
+              id: cpr
+              uses: peter-evans/create-pull-request@v8
+              with:
+                  commit-message: "brew: update python resources"
+                  title: "brew: update python resources"
+                  body: |
+                      Automated update via `brew update-python-resources` (in-place).
+                      If the command becomes non-functional in CI, handle updates manually.
+                  branch: "ci/brew-update-python-resources"
+                  delete-branch: true
+                  add-paths: |
+                      Formula/*.rb
+                      HomebrewFormula/*.rb
+                      *.rb
+
+            - name: Fail with manual instructions if brew step failed
+              if: failure()
+              run: |
+                  echo "brew update-python-resources failed in CI."
+                  echo "Please run it manually (locally) and update the formula resources by hand."
+                  exit 1
