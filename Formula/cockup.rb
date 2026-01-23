@@ -8,6 +8,7 @@ class Cockup < Formula
   license "MIT"
   head "https://github.com/huaium/cockup.git", branch: "main"
 
+  depends_on "libyaml"
   depends_on "python@3.13"
 
   resource "click" do
