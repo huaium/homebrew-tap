@@ -10,7 +10,7 @@ class Cockup < Formula
 
   def install
     system "cargo", "install", *std_cargo_args
-    generate_completions_from_executable(bin/"cockup", "completions", shells: [:bash, :zsh, :fish])
+    generate_completions_from_executable(bin/"cockup", "completions")
   end
 
   test do
