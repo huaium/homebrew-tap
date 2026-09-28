@@ -17,9 +17,7 @@ brew "<formula>"
 
 `brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
 
-## Python Packages
-
-This project uses [homebrew-pypi-poet](https://github.com/tdsmith/homebrew-pypi-poet) to generate resource stanzas required to install Python packages through Homebrew.
+The `cockup` formula builds the published Rust crate and installs bash, zsh, and fish completions.
 
 ## License
 
