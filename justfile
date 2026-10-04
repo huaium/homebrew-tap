@@ -1,29 +1,20 @@
-# Local checks for the cockup tap. Run `just --list` to see the recipes.
-
+[private]
 default:
     @just --list
 
-syntax:
+# Apply style fixes, run all checks, install the edited formula, and test it.
+pre-push:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    brew style --fix huaium/tap
     ruby -c Formula/cockup.rb
     ruby -e 'require "yaml"; ARGV.each { |path| YAML.parse_file(path) }' .github/workflows/*.yml
-
-style:
+    git diff --check
     brew style huaium/tap
-
-audit:
     brew audit --except=installed --tap=huaium/tap
-
-check: syntax style audit
-
-format:
-    brew style --fix huaium/tap
-
-fix: format
-    brew audit --fix huaium/tap/cockup
-
-# Install the release binary using the edited formula, then run its test block.
-test:
-    if brew list --formula cockup >/dev/null 2>&1; then brew reinstall huaium/tap/cockup; else brew install huaium/tap/cockup; fi
+    if brew list --formula cockup >/dev/null 2>&1; then
+        brew reinstall huaium/tap/cockup
+    else
+        brew install huaium/tap/cockup
+    fi
     brew test huaium/tap/cockup
-
-pre-push: check test

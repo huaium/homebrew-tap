@@ -1,21 +1,17 @@
 class Cockup < Formula
   desc "Yet another backup tool for various configurations"
   homepage "https://github.com/huaium/cockup"
-  version "0.2.0"
+  if Hardware::CPU.arm?
+    url "https://github.com/huaium/cockup/releases/download/v0.2.1/cockup-v0.2.1-aarch64-apple-darwin.tar.gz"
+    sha256 "f2f3ac49d5762dddf981675591bef8f195b98babbbfd3854d053493f2e192559"
+  else
+    url "https://github.com/huaium/cockup/releases/download/v0.2.1/cockup-v0.2.1-x86_64-apple-darwin.tar.gz"
+    sha256 "5febff9fda8b471bc223c8cf0d3b25886224b27f29098513a6ffa57debe2b14d"
+  end
+
   license "MIT"
-  revision 1
 
   depends_on :macos
-
-  on_arm do
-    url "https://github.com/huaium/cockup/releases/download/v0.2.0/cockup-v0.2.0-aarch64-apple-darwin.tar.gz"
-    sha256 "ab9484446a1229082f82ba405feb6cd628368e1b6eb9a25b9c91eb1e7c42c32e"
-  end
-
-  on_intel do
-    url "https://github.com/huaium/cockup/releases/download/v0.2.0/cockup-v0.2.0-x86_64-apple-darwin.tar.gz"
-    sha256 "d31c15c55bebb61cf6ede557d32e184f4e0db4e570410579997b22dd9c4ef3f9"
-  end
 
   def install
     bin.install "cockup"
