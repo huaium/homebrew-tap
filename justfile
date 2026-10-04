@@ -21,9 +21,9 @@ format:
 fix: format
     brew audit --fix huaium/tap/cockup
 
-# Build the edited formula, then run its test block.
+# Install the release binary using the edited formula, then run its test block.
 test:
-    if brew list --formula cockup >/dev/null 2>&1; then brew reinstall --build-from-source huaium/tap/cockup; else brew install --build-from-source huaium/tap/cockup; fi
+    if brew list --formula cockup >/dev/null 2>&1; then brew reinstall huaium/tap/cockup; else brew install huaium/tap/cockup; fi
     brew test huaium/tap/cockup
 
 pre-push: check test

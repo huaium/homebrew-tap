@@ -17,7 +17,7 @@ brew "<formula>"
 
 `brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
 
-The `cockup` formula builds the published Rust crate and installs bash, zsh, and fish completions.
+The `cockup` formula installs the prebuilt GitHub release for Apple Silicon or Intel macOS, along with bash, zsh, and fish completions. Rust is not required.
 
 ## License
 

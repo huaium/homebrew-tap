@@ -1,15 +1,24 @@
 class Cockup < Formula
   desc "Yet another backup tool for various configurations"
   homepage "https://github.com/huaium/cockup"
-  url "https://static.crates.io/crates/cockup/cockup-0.2.0.crate"
-  sha256 "ee30a9bba757c10bc6f9e77a572d947d0549e73eb76f34538040e584b4a31eb9"
+  version "0.2.0"
   license "MIT"
-  head "https://github.com/huaium/cockup.git", branch: "main"
+  revision 1
 
-  depends_on "rust" => :build
+  depends_on :macos
+
+  on_arm do
+    url "https://github.com/huaium/cockup/releases/download/v0.2.0/cockup-v0.2.0-aarch64-apple-darwin.tar.gz"
+    sha256 "ab9484446a1229082f82ba405feb6cd628368e1b6eb9a25b9c91eb1e7c42c32e"
+  end
+
+  on_intel do
+    url "https://github.com/huaium/cockup/releases/download/v0.2.0/cockup-v0.2.0-x86_64-apple-darwin.tar.gz"
+    sha256 "d31c15c55bebb61cf6ede557d32e184f4e0db4e570410579997b22dd9c4ef3f9"
+  end
 
   def install
-    system "cargo", "install", *std_cargo_args
+    bin.install "cockup"
     generate_completions_from_executable(bin/"cockup", "completions")
   end
 
