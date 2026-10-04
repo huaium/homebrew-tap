@@ -9,6 +9,7 @@ class Cockup < Formula
     sha256 "05ca8030d22a62ecd4eda255861bf472a5db6bf592379f4098197e5508ce8b40"
   end
 
+  version "0.2.2"
   license "MIT"
 
   depends_on :macos
